@@ -1,5 +1,6 @@
 package com.example.petcare;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +31,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 1. 先檢查有沒有儲存的 Token
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        String token = prefs.getString("JWT_TOKEN", "");
+
+        if (!token.isEmpty()) {
+            // 2. 有 Token 的話，可以選擇直接跳轉到 MainActivity
+            // (更嚴謹的做法是先打一個 API 驗證 Token 是否過期，若沒過期再跳)
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return; // 結束 onCreate，不要再載入登入畫面了
+        }
         setContentView(R.layout.activity_login); // 確保你的 XML 畫面檔名正確
 
         editAccount = findViewById(R.id.editAccount);
@@ -51,29 +64,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // 登入成功！拿到 Token
                     String token = response.body().getToken();
-
-                    // 儲存 Token 到手機的 SharedPreferences
                     saveToken(token);
 
                     Toast.makeText(LoginActivity.this, "登入成功！", Toast.LENGTH_SHORT).show();
-                    // TODO: 跳轉到 App 首頁
-                    // 注意：現在呼叫 getApi() 必須傳入 context (例如 LoginActivity.this)
-                    RetrofitClient.getApi(LoginActivity.this).getProfile().enqueue(new Callback<Object>() {
-                        @Override
-                        public void onResponse(Call<Object> call, Response<Object> response) {
-                            if (response.isSuccessful()) {
-                                Log.d("API_TEST", "成功取得資料: " + new Gson().toJson(response.body()));
-                            } else {
-                                Log.e("API_TEST", "權限不足或 Token 失效，代碼: " + response.code());
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<Object> call, Throwable t) {
-                            Log.e("API_TEST", "連線失敗: " + t.getMessage());
-                        }
-                    });
+
+                    // 🌟 跳轉到首頁 (假設你的首頁叫做 MainActivity)
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                    // 🌟 關鍵：清除 Activity 堆疊。這樣按返回鍵就不會回到 LoginActivity 了
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                    startActivity(intent);
+                    finish(); // 關閉當前的 LoginActivity
                 } else {
                     // 登入失敗 (例如 400 Bad Request)
 //                    Toast.makeText(LoginActivity.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show();
