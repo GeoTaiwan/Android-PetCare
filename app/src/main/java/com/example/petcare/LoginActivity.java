@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.gson.Gson;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         LoginRequest request = new LoginRequest(account, password);
 
         // 呼叫 API
-        RetrofitClient.getApi().login(request).enqueue(new Callback<LoginResponse>() {
+        RetrofitClient.getApi(LoginActivity.this).login(request).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -56,6 +59,21 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this, "登入成功！", Toast.LENGTH_SHORT).show();
                     // TODO: 跳轉到 App 首頁
+                    // 注意：現在呼叫 getApi() 必須傳入 context (例如 LoginActivity.this)
+                    RetrofitClient.getApi(LoginActivity.this).getProfile().enqueue(new Callback<Object>() {
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("API_TEST", "成功取得資料: " + new Gson().toJson(response.body()));
+                            } else {
+                                Log.e("API_TEST", "權限不足或 Token 失效，代碼: " + response.code());
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            Log.e("API_TEST", "連線失敗: " + t.getMessage());
+                        }
+                    });
                 } else {
                     // 登入失敗 (例如 400 Bad Request)
 //                    Toast.makeText(LoginActivity.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show();
