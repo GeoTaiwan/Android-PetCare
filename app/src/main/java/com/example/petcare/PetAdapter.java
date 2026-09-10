@@ -6,6 +6,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +39,28 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         PetDto pet = petList.get(position);
 
         holder.tvPetName.setText(pet.getName());
-
-        // 組合字串：例如 "貓 - 波斯貓"
         String info = pet.getSpecies() + (pet.getBreed() != null ? " - " + pet.getBreed() : "");
         holder.tvPetInfo.setText(info);
 
-        // TODO: 之後可以使用 Glide 套件載入 pet.getProfilePhotoUrl() 的圖片
+        // 🌟 處理圖片載入
+        String photoUrl = pet.getProfilePhotoUrl();
+
+        if (photoUrl != null && !photoUrl.isEmpty()) {
+            // 將相對路徑補上伺服器網址 (請換成你實際的 Port，例如 5163)
+            String fullImageUrl = "http://10.0.2.2:5163" + photoUrl;
+
+            Glide.with(holder.itemView.getContext())
+                    .load(fullImageUrl)
+                    // 如果載入中或載入失敗，顯示預設相機圖示
+                    .placeholder(android.R.drawable.ic_menu_camera)
+                    .error(android.R.drawable.ic_menu_camera)
+                    // 可選：讓圖片變成圓角，看起來更有質感
+                    .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(24)))
+                    .into(holder.ivPetImage);
+        } else {
+            // 如果這隻寵物根本沒有大頭貼，直接顯示預設圖示
+            holder.ivPetImage.setImageResource(android.R.drawable.ic_menu_camera);
+        }
     }
 
     @Override
