@@ -1,6 +1,7 @@
 package com.example.petcare;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +13,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -84,9 +88,11 @@ public class LoginActivity extends AppCompatActivity {
                         // 讀取後端實際回傳的錯誤內容
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "無內容";
                         Log.e("API_DEBUG", "HTTP狀態碼: " + response.code() + ", 錯誤內容: " + errorBody);
-                        Toast.makeText(LoginActivity.this, "連線失敗，代碼: " + response.code(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(LoginActivity.this, "連線失敗，代碼: " + response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "登入失敗: 帳號或密碼錯誤", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
+//                        Toast.makeText(LoginActivity.this, "登入失敗: 連線異常", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -106,5 +112,24 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("JWT_TOKEN", token);
         editor.apply(); // 非同步寫入，效能較好
+    }
+    //點擊空白處可隱藏鍵盤，應不需與Scroll共用
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                // 如果點擊的位置不在 EditText 範圍內
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    // 呼叫系統服務，隱藏鍵盤
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 }

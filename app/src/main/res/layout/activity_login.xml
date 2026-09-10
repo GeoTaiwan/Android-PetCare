@@ -1,91 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp"
     android:background="#FAF9F6"
+    android:fillViewport="true"
     tools:context=".LoginActivity">
 
-    <!-- 1. Logo 圖片 (替換原本的標題) -->
-<ImageView
-android:id="@+id/ivLogo"
-android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:adjustViewBounds="true"
-    android:src="@drawable/pet_care"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/accountLayout"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintVertical_bias="0.3" /> <!-- 稍微往上移一點，留空間給鍵盤 -->
 
-    <!-- 2. 帳號輸入框 -->
-<com.google.android.material.textfield.TextInputLayout
-android:id="@+id/accountLayout"
-style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:hint="電子郵件或帳號"
-app:layout_constraintTop_toBottomOf="@+id/ivLogo"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-android:layout_marginTop="32dp">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FAF9F6"
+        android:padding="32dp"
+        tools:context=".LoginActivity">
 
-<com.google.android.material.textfield.TextInputEditText
-    android:id="@+id/editAccount"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="textEmailAddress" />
-</com.google.android.material.textfield.TextInputLayout>
+        <!-- 1. Logo 圖片 (替換原本的標題) -->
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/pet_care"
+            app:layout_constraintBottom_toTopOf="@+id/accountLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" /> <!-- 稍微往上移一點，留空間給鍵盤 -->
 
-    <!-- 3. 密碼輸入框 -->
-<com.google.android.material.textfield.TextInputLayout
-android:id="@+id/passwordLayout"
-style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:hint="密碼"
-app:passwordToggleEnabled="true"
-app:layout_constraintTop_toBottomOf="@+id/accountLayout"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-android:layout_marginTop="16dp">
+        <!-- 2. 帳號輸入框 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/accountLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="電子郵件或帳號"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogo">
 
-<com.google.android.material.textfield.TextInputEditText
-    android:id="@+id/editPassword"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="textPassword" />
-</com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 4. 登入按鈕 -->
-<com.google.android.material.button.MaterialButton
-android:id="@+id/btnLogin"
-android:layout_width="0dp"
-android:layout_height="60dp"
-android:text="登入"
-android:textSize="18sp"
-app:cornerRadius="8dp"
-app:backgroundTint="#265B6A"
-    app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="32dp" />
+        <!-- 3. 密碼輸入框 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="密碼"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/accountLayout"
+            app:passwordToggleEnabled="true">
 
-    <!-- 5. 註冊提示 -->
-<TextView
-android:id="@+id/tvRegister"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="還沒有帳號？點此註冊"
-android:textColor="#F49A73"
-    android:textStyle="bold"
-    app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="24dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 4. 登入按鈕 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:text="登入"
+            android:textSize="18sp"
+            app:backgroundTint="#265B6A"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+
+        <!-- 5. 註冊提示 -->
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="還沒有帳號？點此註冊"
+            android:textColor="#F49A73"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
