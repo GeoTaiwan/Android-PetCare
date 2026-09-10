@@ -3,6 +3,8 @@ package com.example.petcare.petlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
+import com.example.petcare.petcreate.PetCreateActivity;
 import com.example.petcare.petdetail.PetDetailActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -22,12 +26,16 @@ import retrofit2.Response;
 public class PetListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PetAdapter petAdapter;
+    // 🌟 宣告新元件
+    private LinearLayout layoutEmptyState;
+    private FloatingActionButton fabAddPet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_list); // 對應你的 XML 檔名
-
+        fabAddPet = findViewById(R.id.fabAddPet);
+        layoutEmptyState = findViewById(R.id.layoutEmptyState);
         // 1. 初始化 RecyclerView 與 Adapter
         recyclerView = findViewById(R.id.recyclerViewPets);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -46,8 +54,20 @@ public class PetListActivity extends AppCompatActivity {
             // 啟動新的 Activity
             startActivity(intent);
         });
+        // 🌟 設定新增按鈕點擊事件
+        fabAddPet.setOnClickListener(v -> {
+            // 跳轉到新增寵物的頁面 (請確保你有建立 PetCreateActivity)
+            Intent intent = new Intent(PetListActivity.this, PetCreateActivity.class);
+            startActivity(intent);
+        });
 
         // 2. 呼叫 API 抓取資料
+//        fetchMyPets();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         fetchMyPets();
     }
 
@@ -57,13 +77,21 @@ public class PetListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<PetListResponse> call, Response<PetListResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // 取出後端傳來的 Array
                     List<PetDto> myPets = response.body().getData();
 
-                    // 把資料交給 Adapter，畫面就會自動生出清單了！
-                    petAdapter.setPetList(myPets);
-                } else {
-                    Toast.makeText(PetListActivity.this, "讀取失敗: " + response.code(), Toast.LENGTH_SHORT).show();
+                    // 🌟 檢查資料是否為空
+                    if (myPets == null || myPets.isEmpty()) {
+                        // 隱藏清單，顯示空狀態提示
+                        recyclerView.setVisibility(View.GONE);
+                        layoutEmptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        // 顯示清單，隱藏空狀態提示
+                        recyclerView.setVisibility(View.VISIBLE);
+                        layoutEmptyState.setVisibility(View.GONE);
+
+                        // 綁定資料到 Adapter
+                        petAdapter.setPetList(myPets);
+                    }
                 }
             }
 

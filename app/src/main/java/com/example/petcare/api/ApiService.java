@@ -2,6 +2,7 @@ package com.example.petcare.api;
 
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
+import com.example.petcare.petcreate.PetCreateDto;
 import com.example.petcare.petdetail.PetDetailResponse;
 import com.example.petcare.petlist.PetListResponse;
 
@@ -24,5 +25,7 @@ public interface ApiService {
     // {id} 會被下面 @Path("id") 的變數替換掉
     @GET("api/Pets/{id}")
     Call<PetDetailResponse> getPetDetail(@Path("id") int petId);
-
+    @POST("api/Pets")
+    Call<Object> createPet(@Body PetCreateDto newPet);
+// 這裡的回傳值用 Object 即可，因為新增成功我們通常只看 HTTP 狀態碼是不是 2xx
 }
