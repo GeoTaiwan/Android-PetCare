@@ -63,38 +63,71 @@
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- 2. 必填：物種 (例如狗、貓) -->
+        <!-- 🌟 修改：物種 (下拉選單) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutSpecies"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="物種 (必填) * 例如: 狗"
+            android:hint="物種 (必填) *"
             app:layout_constraintTop_toBottomOf="@+id/layoutName">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- 注意：inputType 必須設為 none，這樣點擊時才不會彈出鍵盤 -->
+            <AutoCompleteTextView
                 android:id="@+id/editSpecies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- 3. 選填：品種 -->
+        <!-- 🌟 修改：品種 (下拉選單，會跟隨物種改變) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutBreed"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="品種"
+            app:layout_constraintTop_toBottomOf="@+id/layoutSpecies">
+            <AutoCompleteTextView
+                android:id="@+id/editBreed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 🌟 新增：性別 (下拉選單) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutGender"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="性別"
+            app:layout_constraintTop_toBottomOf="@+id/layoutBreed">
+            <AutoCompleteTextView
+                android:id="@+id/editGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 🌟 新增：生日 (點擊彈出月曆) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutDob"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="品種 (選填) 例如: 柴犬"
-            app:layout_constraintTop_toBottomOf="@+id/layoutSpecies">
-
+            android:hint="生日 (YYYY-MM-DD)"
+            app:layout_constraintTop_toBottomOf="@+id/layoutGender">
+            <!-- focusable 設為 false，避免游標閃爍；改用點擊事件觸發 -->
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editBreed"
+                android:id="@+id/editDob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:focusable="false"
+                android:clickable="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- 4. 選填：晶片號碼 -->
@@ -105,13 +138,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="晶片號碼 (選填)"
-            app:layout_constraintTop_toBottomOf="@+id/layoutBreed">
+            app:layout_constraintTop_toBottomOf="@+id/layoutDob">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editMicrochip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 🌟 新增：特殊注意事項 (多行輸入) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutNotes"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="特殊注意事項 (例如：對藥物過敏...)"
+            app:layout_constraintTop_toBottomOf="@+id/layoutMicrochip">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="3"
+                android:gravity="top"
+                android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- 儲存按鈕 -->
@@ -124,7 +175,7 @@
             android:textSize="18sp"
             app:cornerRadius="8dp"
             app:backgroundTint="#265B6A"
-            app:layout_constraintTop_toBottomOf="@+id/layoutMicrochip" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutNotes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

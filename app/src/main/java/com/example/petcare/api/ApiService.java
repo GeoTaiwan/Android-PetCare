@@ -3,6 +3,7 @@ package com.example.petcare.api;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
 import com.example.petcare.petcreate.PetCreateDto;
+import com.example.petcare.petcreate.PetOptionsResponse;
 import com.example.petcare.petdetail.PetDetailResponse;
 import com.example.petcare.petlist.PetListResponse;
 
@@ -45,6 +46,12 @@ public interface ApiService {
             @Part("Species") RequestBody species,
             @Part("Breed") RequestBody breed,
             @Part("MicrochipNo") RequestBody microchipNo,
-            @Part MultipartBody.Part uploadPhoto // 檔案本身
+            @Part MultipartBody.Part uploadPhoto, // 檔案本身
+            @Part("Gender") RequestBody gender,       // 🌟 新增
+            @Part("DateOfBirth") RequestBody dob,     // 🌟 新增
+            @Part("SpecialNotes") RequestBody notes  // 🌟 新增
     );
+    //取得Pet下拉式清單所需資料
+    @GET("api/Pets/options")
+    Call<PetOptionsResponse> getPetOptions();
 }

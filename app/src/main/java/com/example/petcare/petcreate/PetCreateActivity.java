@@ -1,9 +1,12 @@
 package com.example.petcare.petcreate;
 
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,9 +30,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PetCreateActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    private TextInputEditText editName, editSpecies, editBreed, editMicrochip;
+public class PetCreateActivity extends AppCompatActivity {
+    // 宣告改用 AutoCompleteTextView
+    private AutoCompleteTextView editSpecies, editBreed, editGender;
+    private TextInputEditText editDob, editNotes; // 新增這兩個
+    private TextInputEditText editName, editMicrochip;
     private Button btnSave;
     // 宣告元件
     private ImageView ivSelectPhoto;
@@ -45,6 +57,11 @@ public class PetCreateActivity extends AppCompatActivity {
                 }
             });
 
+    // 🌟 將變數宣告為空集合，等待 API 填入
+    private List<String> speciesOptions = new ArrayList<>();
+    private List<String> genderOptions = new ArrayList<>();
+    private Map<String, List<String>> breedMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +74,95 @@ public class PetCreateActivity extends AppCompatActivity {
         editMicrochip = findViewById(R.id.editMicrochip);
         btnSave = findViewById(R.id.btnSave);
         ivSelectPhoto = findViewById(R.id.ivSelectPhoto);
+        // 綁定所有 UI (記得把前面宣告的都 findViewById)
+        editGender = findViewById(R.id.editGender);
+        editDob = findViewById(R.id.editDob);
+        editNotes = findViewById(R.id.editNotes);
 
+        // 🌟 進入畫面時，先將輸入框鎖定，避免資料還沒載入完使用者就點擊
+        editSpecies.setEnabled(false);
+        editGender.setEnabled(false);
+        editBreed.setEnabled(false);
+
+        // 呼叫 API 取得動態選單資料
+        fetchOptionsFromApi();
+//        setupDropdowns();
+        setupDatePicker();
         // 🌟 2. 點擊圖片時開啟相簿，限定選擇 image 類型
         ivSelectPhoto.setOnClickListener(v -> getContent.launch("image/*"));
         // 設定按鈕點擊事件
         btnSave.setOnClickListener(v -> submitForm());
+    }
+    private void fetchOptionsFromApi() {
+        RetrofitClient.getApi(this).getPetOptions().enqueue(new Callback<PetOptionsResponse>() {
+            @Override
+            public void onResponse(Call<PetOptionsResponse> call, Response<PetOptionsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PetOptionsDto options = response.body().getData();
+
+                    // 1. 把 API 取回的資料存入全域變數
+                    speciesOptions = options.getSpecies();
+                    genderOptions = options.getGenders();
+                    breedMap = options.getBreeds();
+
+                    // 2. 解除輸入框的鎖定
+                    editSpecies.setEnabled(true);
+                    editGender.setEnabled(true);
+                    editBreed.setEnabled(true);
+
+                    // 3. 初始化選單
+                    setupDropdowns();
+                } else {
+                    Toast.makeText(PetCreateActivity.this, "無法載入選項資料", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PetOptionsResponse> call, Throwable t) {
+                Toast.makeText(PetCreateActivity.this, "網路連線異常", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupDropdowns() {
+        // 設定物種與性別的 Adapter
+        ArrayAdapter<String> speciesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, speciesOptions);
+        editSpecies.setAdapter(speciesAdapter);
+
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, genderOptions);
+        editGender.setAdapter(genderAdapter);
+
+        // 連動邏輯：當選擇物種時，從 API 拿到的 breedMap 中找出對應的品種陣列
+        editSpecies.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedSpecies = speciesOptions.get(position);
+            List<String> breeds = breedMap.get(selectedSpecies);
+
+            if (breeds != null) {
+                ArrayAdapter<String> breedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, breeds);
+                editBreed.setAdapter(breedAdapter);
+                editBreed.setText(""); // 切換物種時清空舊品種
+            }
+        });
+    }
+
+    private void setupDatePicker() {
+        editDob.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // 月份從 0 開始，所以要 +1。格式化為 YYYY-MM-DD
+                        String dateString = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                        editDob.setText(dateString);
+                    }, year, month, day);
+
+            // 不允許選擇未來的日期
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.show();
+        });
     }
 
     private void submitForm() {
@@ -69,7 +170,11 @@ public class PetCreateActivity extends AppCompatActivity {
         String name = editName.getText().toString().trim();
         String species = editSpecies.getText().toString().trim();
         String breed = editBreed.getText().toString().trim();
+        String gender = editGender.getText().toString().trim();
+        String dob = editDob.getText().toString().trim();
+        Log.d("API_TEST", "準備送出的生日字串是: " + dob);
         String microchip = editMicrochip.getText().toString().trim();
+        String notes = editNotes.getText().toString().trim();
 
         // 2. 表單驗證：檢查必填欄位
         if (TextUtils.isEmpty(name)) {
@@ -88,9 +193,12 @@ public class PetCreateActivity extends AppCompatActivity {
         RequestBody rbName = RequestBody.create(name, MediaType.parse("text/plain"));
         RequestBody rbSpecies = RequestBody.create(species, MediaType.parse("text/plain"));
 
-        // 處理可為 null 的欄位
+        // 選填欄位：如果使用者有填寫，才建立 RequestBody；否則設為 null，Retrofit 會自動忽略這個 Part
         RequestBody rbBreed = breed.isEmpty() ? null : RequestBody.create(breed, MediaType.parse("text/plain"));
+        RequestBody rbGender = gender.isEmpty() ? null : RequestBody.create(gender, MediaType.parse("text/plain"));
+        RequestBody rbDob = dob.isEmpty() ? null : RequestBody.create(dob, MediaType.parse("text/plain"));
         RequestBody rbMicrochip = microchip.isEmpty() ? null : RequestBody.create(microchip, MediaType.parse("text/plain"));
+        RequestBody rbNotes = notes.isEmpty() ? null : RequestBody.create(notes, MediaType.parse("text/plain"));
 
         // 🌟 4. 處理圖片檔案轉換
         MultipartBody.Part photoPart = null;
@@ -109,7 +217,7 @@ public class PetCreateActivity extends AppCompatActivity {
         btnSave.setEnabled(false);
         btnSave.setText("儲存中...");
 
-        RetrofitClient.getApi(this).createPetWithPhoto(rbName, rbSpecies, rbBreed, rbMicrochip, photoPart).enqueue(new Callback<Object>() {
+        RetrofitClient.getApi(this).createPetWithPhoto(rbName, rbSpecies, rbBreed, rbMicrochip, photoPart,rbGender,rbDob,rbNotes).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.isSuccessful()) {
