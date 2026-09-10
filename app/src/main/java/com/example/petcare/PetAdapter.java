@@ -19,6 +19,18 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     private List<PetDto> petList = new ArrayList<>();
 
+    // 🌟 1. 定義點擊監聽器介面
+    public interface OnItemClickListener {
+        void onItemClick(PetDto pet); // 把被點擊的寵物物件傳出去
+    }
+
+    private OnItemClickListener listener;
+
+    // 🌟 2. 讓外部 (Activity) 可以註冊這個監聽器
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     // 提供給外部更新資料的方法
     public void setPetList(List<PetDto> newList) {
         this.petList = newList;
@@ -61,6 +73,14 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             // 如果這隻寵物根本沒有大頭貼，直接顯示預設圖示
             holder.ivPetImage.setImageResource(android.R.drawable.ic_menu_camera);
         }
+
+        // 🌟 3. 設定卡片的點擊事件
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(pet); // 觸發介面，把資料往外送
+            }
+        });
+
     }
 
     @Override

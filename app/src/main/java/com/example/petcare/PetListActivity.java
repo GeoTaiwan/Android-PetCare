@@ -1,5 +1,6 @@
 package com.example.petcare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,6 +34,18 @@ public class PetListActivity extends AppCompatActivity {
 
         petAdapter = new PetAdapter();
         recyclerView.setAdapter(petAdapter);
+
+        // 🌟 4. 實作點擊事件，準備換頁並傳遞 PetID
+        petAdapter.setOnItemClickListener(pet -> {
+            // 建立 Intent 指定要跳轉的目標 Activity
+            Intent intent = new Intent(PetListActivity.this, PetDetailActivity.class);
+
+            // 使用 putExtra 夾帶資料，這裡的 "PET_ID" 是取資料用的鑰匙 (Key)
+            intent.putExtra("PET_ID", pet.getPetId());
+
+            // 啟動新的 Activity
+            startActivity(intent);
+        });
 
         // 2. 呼叫 API 抓取資料
         fetchMyPets();

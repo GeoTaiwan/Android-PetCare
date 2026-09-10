@@ -12,6 +12,9 @@ public class PetDto {
     private String profilePhotoUrl;
 
     // 請利用 Android Studio 的右鍵 Generate -> Getter，幫這些屬性產生對應的 get 方法
+    public int getPetId(){
+        return petId;
+    }
     public String getName() {
         return name;
     }
