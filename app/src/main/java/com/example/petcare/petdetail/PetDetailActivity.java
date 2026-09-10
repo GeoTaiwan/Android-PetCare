@@ -1,4 +1,4 @@
-package com.example.petcare;
+package com.example.petcare.petdetail;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -6,6 +6,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.example.petcare.R;
+import com.example.petcare.api.RetrofitClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

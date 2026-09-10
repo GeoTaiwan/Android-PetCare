@@ -1,17 +1,13 @@
-package com.example.petcare;
+package com.example.petcare.auth;
 
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +15,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
+import com.example.petcare.MainActivity;
+import com.example.petcare.R;
+import com.example.petcare.api.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

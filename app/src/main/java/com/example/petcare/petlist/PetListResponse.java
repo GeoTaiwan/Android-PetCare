@@ -1,4 +1,4 @@
-package com.example.petcare;
+package com.example.petcare.petlist;
 
 import java.util.List;
 

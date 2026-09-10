@@ -1,4 +1,4 @@
-package com.example.petcare;
+package com.example.petcare.auth;
 
 public class LoginRequest {
     private String account;

@@ -1,4 +1,4 @@
-package com.example.petcare;
+package com.example.petcare.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

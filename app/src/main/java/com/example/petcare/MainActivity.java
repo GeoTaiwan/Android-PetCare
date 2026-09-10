@@ -6,15 +6,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.petcare.auth.LoginActivity;
+import com.example.petcare.petlist.PetListActivity;
+import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_logout,btn_petList;
+    ImageView btn_logout;
+    MaterialCardView cardMyPets;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +27,20 @@ public class MainActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
-        btn_logout = findViewById(R.id.btn_logout);
-        btn_petList = findViewById(R.id.btn_pet_list);
+        btn_logout = findViewById(R.id.btnLogout);
+        cardMyPets = findViewById(R.id.cardMyPets);
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 performLogout();
             }
         });
-        btn_petList.setOnClickListener(new View.OnClickListener() {
+
+        cardMyPets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,PetListActivity.class);
+                Intent i = new Intent(MainActivity.this, PetListActivity.class);
                 startActivity(i);
             }
         });

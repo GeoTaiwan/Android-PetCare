@@ -1,4 +1,9 @@
-package com.example.petcare;
+package com.example.petcare.api;
+
+import com.example.petcare.auth.LoginRequest;
+import com.example.petcare.auth.LoginResponse;
+import com.example.petcare.petdetail.PetDetailResponse;
+import com.example.petcare.petlist.PetListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

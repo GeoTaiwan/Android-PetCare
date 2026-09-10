@@ -1,4 +1,4 @@
-package com.example.petcare;
+package com.example.petcare.petdetail;
 
 public class PetDetailDto {
     private int petId;
