@@ -14,7 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_logout;
+    Button btn_logout,btn_petList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +26,18 @@ public class MainActivity extends AppCompatActivity {
 //            return insets;
 //        });
         btn_logout = findViewById(R.id.btn_logout);
+        btn_petList = findViewById(R.id.btn_pet_list);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 performLogout();
+            }
+        });
+        btn_petList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,PetListActivity.class);
+                startActivity(i);
             }
         });
 

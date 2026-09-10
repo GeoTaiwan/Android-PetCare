@@ -17,6 +17,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/btn_pet_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="寵物管理"
+        app:layout_constraintStart_toEndOf="@+id/btn_logout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

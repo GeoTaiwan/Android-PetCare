@@ -11,4 +11,8 @@ public interface ApiService {
     Call<LoginResponse> login(@Body LoginRequest request);
     @GET("api/Auth/profile")
     Call<Object> getProfile(); // 測試用，先用 Object 接收任意 JSON
+    // 新增這行：取得我的寵物清單
+    @GET("api/Pets/my")
+    Call<PetListResponse> getMyPets();
+
 }
