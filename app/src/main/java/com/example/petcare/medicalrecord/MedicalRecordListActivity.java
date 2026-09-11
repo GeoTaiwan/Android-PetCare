@@ -1,5 +1,7 @@
 package com.example.petcare.medicalrecord;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,6 +27,8 @@ public class MedicalRecordListActivity extends AppCompatActivity {
     private MedicalRecordAdapter adapter;
     private LinearLayout layoutEmpty;
     private int currentPetId;
+    // 🌟 定義你後端伺服器的基礎網址 (請換成你實際的 IP，如果是模擬器通常是 10.0.2.2)
+    private static final String BASE_URL = "http://10.0.2.2:5163/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,18 @@ public class MedicalRecordListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new MedicalRecordAdapter();
+        // 🌟 實作點擊事件
+        adapter.setOnItemClickListener(new MedicalRecordAdapter.OnItemClickListener() {
+            @Override
+            public void onAttachmentClick(String fileName) {
+                // 組合出完整的檔案下載網址 (對應你後端 wwwroot/uploads/mrFiles 的路徑)
+                String fileUrl = BASE_URL + "uploads/mrFiles/" + fileName;
+
+                // 使用 Intent 呼叫系統瀏覽器來處理這個網址
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fileUrl));
+                startActivity(browserIntent);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         // 3. 呼叫 API 載入資料
