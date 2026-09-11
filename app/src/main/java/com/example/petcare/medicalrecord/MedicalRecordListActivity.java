@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.petcare.BuildConfig;
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
 import com.example.petcare.medicalrecord.MedicalRecordAdapter;
@@ -53,7 +54,7 @@ public class MedicalRecordListActivity extends AppCompatActivity {
             @Override
             public void onAttachmentClick(String fileName) {
                 // 組合出完整的檔案下載網址 (對應你後端 wwwroot/uploads/mrFiles 的路徑)
-                String fileUrl = RetrofitClient.BASE_URL + "uploads/mrFiles/" + fileName;
+                String fileUrl = BuildConfig.BASE_URL + "uploads/mrFiles/" + fileName;
 
                 // 使用 Intent 呼叫系統瀏覽器來處理這個網址
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fileUrl));

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class RetrofitClient {
 
-    public static final String BASE_URL = BuildConfig.BASE_URL;
+    private static final String BASE_URL = BuildConfig.BASE_URL;
     private static Retrofit retrofit = null;
 
     // 加上 Context 參數，才能讀取 SharedPreferences
