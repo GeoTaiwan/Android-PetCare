@@ -1,4 +1,5 @@
 package com.example.petcare.petdetail;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -15,19 +16,20 @@ import com.bumptech.glide.Glide;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
+import com.example.petcare.petcreate.PetCreateActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PetDetailActivity extends AppCompatActivity {
-
+    private PetDetailDto currentDetail; // 🌟 宣告一個全域變數來存取這隻寵物的完整資料
     private int currentPetId;
 
     // 宣告畫面元件
     private TextView tvName, tvSpeciesBreed, tvDetails, tvWeightInfo;
     private ImageView ivProfilePhoto;
-    private Button btnAddWeight;
+    private Button btnAddWeight,btnEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,41 @@ public class PetDetailActivity extends AppCompatActivity {
         tvWeightInfo = findViewById(R.id.tvWeightInfo);
         ivProfilePhoto = findViewById(R.id.ivProfilePhoto);
         btnAddWeight = findViewById(R.id.btn_addWeight);
+        btnEdit = findViewById(R.id.btnEdit);
+
         btnAddWeight.setOnClickListener(v -> showAddWeightDialog());
+        btnEdit.setOnClickListener(v -> {
+            if (currentDetail == null) return; // 確保資料已經載入
+
+            Intent intent = new Intent(PetDetailActivity.this, PetCreateActivity.class);
+
+            // 標記這是編輯模式
+            intent.putExtra("IS_EDIT_MODE", true);
+
+            // 把現有資料帶過去
+            intent.putExtra("PET_ID", currentPetId);
+            intent.putExtra("PET_NAME", currentDetail.getName());
+            intent.putExtra("PET_SPECIES", currentDetail.getSpecies());
+
+            // 以下欄位因為可能為 null (後端傳來的)，所以做一下安全處理
+            intent.putExtra("PET_BREED", currentDetail.getBreed() != null ? currentDetail.getBreed() : "");
+            intent.putExtra("PET_GENDER", currentDetail.getGender() != null ? currentDetail.getGender() : "");
+
+            // 生日格式可能是 "2024-05-15T00:00:00"，我們只需要前面日期部分
+            String dob = "";
+            if (currentDetail.getDateOfBirth() != null && currentDetail.getDateOfBirth().length() >= 10) {
+                dob = currentDetail.getDateOfBirth().substring(0, 10);
+            }
+            intent.putExtra("PET_DOB", dob);
+
+            intent.putExtra("PET_NOTES", currentDetail.getSpecialNotes() != null ? currentDetail.getSpecialNotes() : "");
+            intent.putExtra("PET_MICROCHIP", currentDetail.getMicrochipNo() != null ? currentDetail.getMicrochipNo() : "");
+            // 圖片 URL 也可以傳過去，如果你想在編輯畫面顯示舊照片的話
+            intent.putExtra("PET_PHOTO_URL", currentDetail.getProfilePhotoUrl());
+
+            startActivity(intent);
+        });
+
 
         currentPetId = getIntent().getIntExtra("PET_ID", -1);
 
@@ -52,6 +88,12 @@ public class PetDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "無法取得寵物資料", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchPetDetails(currentPetId);
     }
 
     // 🌟 顯示輸入體重的 Dialog
@@ -124,7 +166,9 @@ public class PetDetailActivity extends AppCompatActivity {
             public void onResponse(Call<PetDetailResponse> call, Response<PetDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PetDetailDto detail = response.body().getData();
+                    currentDetail = detail;
                     updateUI(detail); // 成功取得後，把資料交給更新畫面的方法
+
                 } else {
                     Toast.makeText(PetDetailActivity.this, "載入失敗或無權限", Toast.LENGTH_SHORT).show();
                 }

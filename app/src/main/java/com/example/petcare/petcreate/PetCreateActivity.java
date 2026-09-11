@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -38,6 +39,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PetCreateActivity extends AppCompatActivity {
+    // 宣告全域變數
+    private boolean isEditMode = false;
+    private int editPetId = -1;
     // 宣告改用 AutoCompleteTextView
     private AutoCompleteTextView editSpecies, editBreed, editGender;
     private TextInputEditText editDob, editNotes; // 新增這兩個
@@ -83,6 +87,27 @@ public class PetCreateActivity extends AppCompatActivity {
         editSpecies.setEnabled(false);
         editGender.setEnabled(false);
         editBreed.setEnabled(false);
+
+        // 🌟 1. 檢查是否為編輯模式
+        isEditMode = getIntent().getBooleanExtra("IS_EDIT_MODE", false);
+
+        if (isEditMode) {
+            editPetId = getIntent().getIntExtra("PET_ID", -1);
+
+            // 更改畫面的標題與按鈕文字
+            TextView tvTitle = findViewById(R.id.tvTitle);
+            tvTitle.setText("修改寵物資料");
+            btnSave.setText("更新資料");
+
+            // 預先填入舊資料 (注意 AutoCompleteTextView 使用 setText 的第二個參數 false 避免觸發下拉清單)
+            editName.setText(getIntent().getStringExtra("PET_NAME"));
+            editSpecies.setText(getIntent().getStringExtra("PET_SPECIES"), false);
+            editBreed.setText(getIntent().getStringExtra("PET_BREED"), false);
+            editGender.setText(getIntent().getStringExtra("PET_GENDER"), false);
+            editDob.setText(getIntent().getStringExtra("PET_DOB"));
+            editNotes.setText(getIntent().getStringExtra("PET_NOTES"));
+            editMicrochip.setText(getIntent().getStringExtra("PET_MICROCHIP"));
+        }
 
         // 呼叫 API 取得動態選單資料
         fetchOptionsFromApi();
@@ -211,36 +236,66 @@ public class PetCreateActivity extends AppCompatActivity {
             }
         }
 
+        Log.d("API_TEST", "準備更新的 Pet ID: " + editPetId);
 
         // 5. 發送 POST 請求
         // 因為是要寫入資料，可以考慮在按鈕上顯示 loading 或暫時停用按鈕防連點
         btnSave.setEnabled(false);
         btnSave.setText("儲存中...");
 
-        RetrofitClient.getApi(this).createPetWithPhoto(rbName, rbSpecies, rbBreed, rbMicrochip, photoPart,rbGender,rbDob,rbNotes).enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(PetCreateActivity.this, "新增成功！", Toast.LENGTH_SHORT).show();
+        if (isEditMode) {
+            // 🌟 編輯模式：呼叫 PUT API
+            RetrofitClient.getApi(this).updatePetWithPhoto(
+                    editPetId, rbName, rbSpecies, rbBreed, rbGender, rbDob, rbNotes, rbMicrochip, photoPart
+            ).enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(PetCreateActivity.this, "更新成功！", Toast.LENGTH_SHORT).show();
+                        finish(); // 關閉畫面，回到詳細頁
+                    } else {
+                        Toast.makeText(PetCreateActivity.this, "更新失敗: " + response.code(), Toast.LENGTH_SHORT).show();
+                        btnSave.setEnabled(true);
+                        btnSave.setText("更新資料");
+                    }
+                }
 
-                    // 🌟 關鍵：新增成功後，關閉當前畫面，回到前一頁 (寵物列表)
-                    finish();
-                } else {
-                    Toast.makeText(PetCreateActivity.this, "新增失敗: " + response.code(), Toast.LENGTH_SHORT).show();
-                    // 恢復按鈕狀態
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    Toast.makeText(PetCreateActivity.this, "網路連線異常", Toast.LENGTH_SHORT).show();
+                    btnSave.setEnabled(true);
+                    btnSave.setText("更新資料");
+                }
+            });
+        } else {
+            // 🌟 新增模式：呼叫原本的 POST API
+            RetrofitClient.getApi(this).createPetWithPhoto(rbName, rbSpecies, rbBreed, rbMicrochip, photoPart,rbGender,rbDob,rbNotes).enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(PetCreateActivity.this, "新增成功！", Toast.LENGTH_SHORT).show();
+
+                        // 🌟 關鍵：新增成功後，關閉當前畫面，回到前一頁 (寵物列表)
+                        finish();
+                    } else {
+                        Toast.makeText(PetCreateActivity.this, "新增失敗: " + response.code(), Toast.LENGTH_SHORT).show();
+                        // 恢復按鈕狀態
+                        btnSave.setEnabled(true);
+                        btnSave.setText("儲存資料");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    Log.e("API_ERROR", "連線失敗: " + t.getMessage());
+                    Toast.makeText(PetCreateActivity.this, "網路連線異常", Toast.LENGTH_SHORT).show();
                     btnSave.setEnabled(true);
                     btnSave.setText("儲存資料");
                 }
-            }
+            });
+        }
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.e("API_ERROR", "連線失敗: " + t.getMessage());
-                Toast.makeText(PetCreateActivity.this, "網路連線異常", Toast.LENGTH_SHORT).show();
-                btnSave.setEnabled(true);
-                btnSave.setText("儲存資料");
-            }
-        });
+
     }
 
     // 🌟 5. 將 Uri 複製到暫存檔的輔助方法 (Android 10 以上的標準做法)

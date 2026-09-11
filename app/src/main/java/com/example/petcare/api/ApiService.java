@@ -15,6 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -58,4 +59,18 @@ public interface ApiService {
 
     @POST("api/Pets/{id}/weights")
     Call<Object> addPetWeight(@Path("id") int petId, @Body PetWeightCreateDto weightDto);
+
+    @Multipart
+    @PUT("api/Pets/{id}")
+    Call<Object> updatePetWithPhoto(
+            @Path("id") int petId,
+            @Part("Name") RequestBody name,
+            @Part("Species") RequestBody species,
+            @Part("Breed") RequestBody breed,
+            @Part("Gender") RequestBody gender,
+            @Part("DateOfBirth") RequestBody dob,
+            @Part("SpecialNotes") RequestBody notes,
+            @Part("MicrochipNo") RequestBody microchipNo,
+            @Part MultipartBody.Part uploadPhoto // 如果沒有選新圖片，這裡可以傳 null
+    );
 }
