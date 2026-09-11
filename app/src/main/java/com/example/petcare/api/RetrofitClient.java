@@ -2,6 +2,8 @@ package com.example.petcare.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.petcare.BuildConfig;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,7 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 
 public class RetrofitClient {
-    public static final String BASE_URL = "http://10.0.2.2:5163/"; // 確認你的 Port
+
+    public static final String BASE_URL = BuildConfig.BASE_URL;
     private static Retrofit retrofit = null;
 
     // 加上 Context 參數，才能讀取 SharedPreferences
