@@ -1,11 +1,18 @@
 package com.example.petcare.petdetail;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
 
@@ -20,6 +27,7 @@ public class PetDetailActivity extends AppCompatActivity {
     // 宣告畫面元件
     private TextView tvName, tvSpeciesBreed, tvDetails, tvWeightInfo;
     private ImageView ivProfilePhoto;
+    private Button btnAddWeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,8 @@ public class PetDetailActivity extends AppCompatActivity {
         tvDetails = findViewById(R.id.tvDetails);
         tvWeightInfo = findViewById(R.id.tvWeightInfo);
         ivProfilePhoto = findViewById(R.id.ivProfilePhoto);
+        btnAddWeight = findViewById(R.id.btn_addWeight);
+        btnAddWeight.setOnClickListener(v -> showAddWeightDialog());
 
         currentPetId = getIntent().getIntExtra("PET_ID", -1);
 
@@ -42,6 +52,70 @@ public class PetDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "無法取得寵物資料", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    // 🌟 顯示輸入體重的 Dialog
+    private void showAddWeightDialog() {
+        // 1. 動態建立一個輸入框
+        final EditText input = new EditText(this);
+        // 設定鍵盤類型為包含小數點的數字鍵盤
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setHint("請輸入體重 (kg)");
+
+        // 給輸入框一點邊距，看起來比較舒服
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(48, 0, 48, 0);
+        input.setLayoutParams(lp);
+
+        // 建立一個容器來裝輸入框
+        LinearLayout container = new LinearLayout(this);
+        container.addView(input);
+
+        // 2. 建立 AlertDialog
+        new AlertDialog.Builder(this)
+                .setTitle("新增體重紀錄")
+                .setView(container)
+                .setPositiveButton("儲存", (dialog, which) -> {
+                    String weightStr = input.getText().toString().trim();
+                    if (!weightStr.isEmpty()) {
+                        try {
+                            double weight = Double.parseDouble(weightStr);
+                            submitWeightToServer(weight);
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(this, "請輸入有效的數字", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "體重不能為空", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
+    // 🌟 呼叫 API 送出資料
+    private void submitWeightToServer(double weight) {
+        PetWeightCreateDto dto = new PetWeightCreateDto(weight);
+
+        RetrofitClient.getApi(this).addPetWeight(currentPetId, dto).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(PetDetailActivity.this, "體重新增成功", Toast.LENGTH_SHORT).show();
+
+                    // 🌟 關鍵：新增成功後，重新呼叫 fetchPetDetails() 刷新整個畫面的資料
+                    fetchPetDetails(currentPetId);
+                } else {
+                    Toast.makeText(PetDetailActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(PetDetailActivity.this, "連線錯誤", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchPetDetails(int petId) {
@@ -76,7 +150,10 @@ public class PetDetailActivity extends AppCompatActivity {
         tvDetails.setText(moreInfo);
 
         if (detail.getLatestWeight() != null) {
-            tvWeightInfo.setText("最新體重: " + detail.getLatestWeight() + " kg (" + detail.getLatestWeightDate() + ")");
+            //tvWeightInfo.setText("最新體重: " + detail.getLatestWeight() + " kg (" + detail.getLatestWeightDate() + ")");
+            // 🌟 建議這樣寫：使用 String.format 強制顯示小數點後 1 位
+            String weightText = String.format("最新體重: %.1f kg", detail.getLatestWeight());
+            tvWeightInfo.setText(weightText);
         } else {
             tvWeightInfo.setText("尚未記錄體重");
         }

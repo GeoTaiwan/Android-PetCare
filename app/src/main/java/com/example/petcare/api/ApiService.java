@@ -1,5 +1,6 @@
 package com.example.petcare.api;
 
+import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
 import com.example.petcare.petcreate.PetCreateDto;
@@ -54,4 +55,7 @@ public interface ApiService {
     //取得Pet下拉式清單所需資料
     @GET("api/Pets/options")
     Call<PetOptionsResponse> getPetOptions();
+
+    @POST("api/Pets/{id}/weights")
+    Call<Object> addPetWeight(@Path("id") int petId, @Body PetWeightCreateDto weightDto);
 }
