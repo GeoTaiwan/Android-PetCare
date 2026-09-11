@@ -29,7 +29,7 @@ public class PetDetailActivity extends AppCompatActivity {
     // 宣告畫面元件
     private TextView tvName, tvSpeciesBreed, tvDetails, tvWeightInfo;
     private ImageView ivProfilePhoto;
-    private Button btnAddWeight,btnEdit;
+    private Button btnAddWeight,btnEdit,btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class PetDetailActivity extends AppCompatActivity {
         ivProfilePhoto = findViewById(R.id.ivProfilePhoto);
         btnAddWeight = findViewById(R.id.btn_addWeight);
         btnEdit = findViewById(R.id.btnEdit);
+        btnDelete = findViewById(R.id.btnDelete);
 
         btnAddWeight.setOnClickListener(v -> showAddWeightDialog());
         btnEdit.setOnClickListener(v -> {
@@ -76,6 +77,10 @@ public class PetDetailActivity extends AppCompatActivity {
             intent.putExtra("PET_PHOTO_URL", currentDetail.getProfilePhotoUrl());
 
             startActivity(intent);
+        });
+        btnDelete.setOnClickListener(v -> {
+            // 呼叫自訂的防呆對話框
+            showDeleteConfirmDialog();
         });
 
 
@@ -210,5 +215,41 @@ public class PetDetailActivity extends AppCompatActivity {
                     .placeholder(android.R.drawable.ic_menu_camera)
                     .into(ivProfilePhoto);
         }
+    }
+    private void showDeleteConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("刪除寵物確認")
+                .setMessage("確定要刪除這隻寵物嗎？\n\n警告：此動作無法復原，與牠相關的照片、體重與看診紀錄將會一併永久刪除。")
+                .setPositiveButton("確定刪除", (dialog, which) -> {
+                    // 使用者點擊確定，呼叫 API 執行刪除
+                    performDeletePet();
+                })
+                .setNegativeButton("取消", (dialog, which) -> {
+                    // 點擊取消，關閉對話框什麼都不做
+                    dialog.dismiss();
+                })
+                .show();
+    }
+    private void performDeletePet() {
+        // 可以選擇在這裡顯示一個 ProgressDialog 或鎖定畫面
+
+        RetrofitClient.getApi(this).deletePet(currentPetId).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(PetDetailActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
+
+                    // 🌟 關鍵：刪除成功後，關閉詳細資料頁面，自動退回列表頁
+                    finish();
+                } else {
+                    Toast.makeText(PetDetailActivity.this, "刪除失敗: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(PetDetailActivity.this, "網路連線異常，請稍後再試", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

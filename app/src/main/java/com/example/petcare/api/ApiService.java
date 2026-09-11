@@ -12,6 +12,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
@@ -73,4 +74,7 @@ public interface ApiService {
             @Part("MicrochipNo") RequestBody microchipNo,
             @Part MultipartBody.Part uploadPhoto // 如果沒有選新圖片，這裡可以傳 null
     );
+    // 🌟 新增：刪除寵物
+    @DELETE("api/Pets/{id}")
+    Call<Object> deletePet(@Path("id") int petId);
 }
