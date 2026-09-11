@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "http://10.0.2.2:5163/"; // 確認你的 Port
+    public static final String BASE_URL = "http://10.0.2.2:5163/"; // 確認你的 Port
     private static Retrofit retrofit = null;
 
     // 加上 Context 參數，才能讀取 SharedPreferences
