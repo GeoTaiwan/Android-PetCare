@@ -41,7 +41,7 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
         }
         holder.tvVisitDate.setText(formattedDate);
 
-        holder.tvVetId.setText("獸醫: " + record.getVetID());
+        holder.tvVetId.setText("獸醫: " + record.getVetName());
 
         // 處理可能為 null 的文字
         holder.tvSymptoms.setText(record.getSymptoms() != null ? record.getSymptoms() : "無紀錄");

@@ -7,6 +7,10 @@ public class MedicalRecordDto {
     private String symptoms;
     private String diagnosis;
     private String testResultsFile;
+    private String vetName;
+
+
+
 
     public int getRecordID() { return recordID; }
     public String getVisitDate() { return visitDate; }
@@ -14,4 +18,5 @@ public class MedicalRecordDto {
     public String getSymptoms() { return symptoms; }
     public String getDiagnosis() { return diagnosis; }
     public String getTestResultsFile() { return testResultsFile; }
+    public String getVetName() { return vetName; }
 }
