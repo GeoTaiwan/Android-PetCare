@@ -79,6 +79,6 @@ public interface ApiService {
     @DELETE("api/Pets/{id}")
     Call<Object> deletePet(@Path("id") int petId);
 
-    @GET("api/Pets/{id}/medical-records")
+    @GET("api/Pets/medical-records/{id}")
     Call<MedicalRecordListResponse> getMedicalRecords(@Path("id") int petId);
 }

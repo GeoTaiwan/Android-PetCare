@@ -37,11 +37,17 @@ public class MedicalRecordListActivity extends AppCompatActivity {
 
         // 1. 取得從前一頁傳來的 Pet ID
         currentPetId = getIntent().getIntExtra("PET_ID", -1);
-        if (currentPetId == -1) {
-            Toast.makeText(this, "無法取得寵物資料", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+
+        if (getIntent().getBooleanExtra("fromMain",false)){
+            currentPetId = 0;
+        }else {
+            if (currentPetId == -1) {
+                Toast.makeText(this, "無法取得寵物資料", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
         }
+
 
         // 2. 綁定 UI
         layoutEmpty = findViewById(R.id.layoutEmpty);

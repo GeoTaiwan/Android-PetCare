@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.petcare.auth.LoginActivity;
+import com.example.petcare.medicalrecord.MedicalRecordListActivity;
+import com.example.petcare.petdetail.PetDetailActivity;
 import com.example.petcare.petlist.PetListActivity;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
     ImageView btn_logout;
-    MaterialCardView cardMyPets;
+    MaterialCardView cardMyPets,cardMedicalRecords;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
         btn_logout = findViewById(R.id.btnLogout);
         cardMyPets = findViewById(R.id.cardMyPets);
+        cardMedicalRecords = findViewById(R.id.cardMedicalRecords);
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, PetListActivity.class);
                 startActivity(i);
+            }
+        });
+
+        cardMedicalRecords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MedicalRecordListActivity.class);
+//                intent.putExtra("PET_ID", currentPetId);
+                intent.putExtra("fromMain",true);
+                startActivity(intent);
             }
         });
 
