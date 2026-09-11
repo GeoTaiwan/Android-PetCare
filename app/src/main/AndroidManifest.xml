@@ -15,6 +15,9 @@
         android:theme="@style/Theme.PetCare"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".medicalrecord.MedicalRecordListActivity"
+            android:exported="false" />
+        <activity
             android:name=".petcreate.PetCreateActivity"
             android:exported="false" />
         <activity

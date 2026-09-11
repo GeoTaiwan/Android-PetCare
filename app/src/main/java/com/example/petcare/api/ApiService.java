@@ -3,6 +3,7 @@ package com.example.petcare.api;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
+import com.example.petcare.medicalrecord.MedicalRecordListResponse;
 import com.example.petcare.petcreate.PetCreateDto;
 import com.example.petcare.petcreate.PetOptionsResponse;
 import com.example.petcare.petdetail.PetDetailResponse;
@@ -77,4 +78,7 @@ public interface ApiService {
     // 🌟 新增：刪除寵物
     @DELETE("api/Pets/{id}")
     Call<Object> deletePet(@Path("id") int petId);
+
+    @GET("api/Pets/{id}/medical-records")
+    Call<MedicalRecordListResponse> getMedicalRecords(@Path("id") int petId);
 }

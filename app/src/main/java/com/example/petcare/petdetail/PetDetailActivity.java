@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
+import com.example.petcare.medicalrecord.MedicalRecordListActivity;
 import com.example.petcare.petcreate.PetCreateActivity;
 
 import retrofit2.Call;
@@ -29,7 +30,7 @@ public class PetDetailActivity extends AppCompatActivity {
     // 宣告畫面元件
     private TextView tvName, tvSpeciesBreed, tvDetails, tvWeightInfo;
     private ImageView ivProfilePhoto;
-    private Button btnAddWeight,btnEdit,btnDelete;
+    private Button btnAddWeight,btnEdit,btnDelete,btnMedicalRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,13 @@ public class PetDetailActivity extends AppCompatActivity {
         btnAddWeight = findViewById(R.id.btn_addWeight);
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
+        btnMedicalRecord=findViewById(R.id.btn_medicalRecord);
 
+        btnMedicalRecord.setOnClickListener(v -> {
+            Intent intent = new Intent(PetDetailActivity.this, MedicalRecordListActivity.class);
+            intent.putExtra("PET_ID", currentPetId);
+            startActivity(intent);
+        });
         btnAddWeight.setOnClickListener(v -> showAddWeightDialog());
         btnEdit.setOnClickListener(v -> {
             if (currentDetail == null) return; // 確保資料已經載入

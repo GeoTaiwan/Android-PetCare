@@ -165,13 +165,25 @@
                     android:textColor="#555555"
                     android:textSize="16sp" />
 
-                <Button
-                    android:id="@+id/btn_addWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="+" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btn_medicalRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="查看病歷" />
+
+                    <Button
+                        android:id="@+id/btn_addWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="+" />
+                </LinearLayout>
                 <!-- 如果你想加上之前 API 回傳的就診次數，可以在這裡新增 TextView -->
 
             </LinearLayout>
