@@ -71,6 +71,25 @@ public class MedicalRecordListActivity extends AppCompatActivity {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fileUrl));
                 startActivity(browserIntent);
             }
+
+            @Override
+            public void onEditClick(MedicalRecordDto record) {
+                Intent intent = new Intent(MedicalRecordListActivity.this, MedicalRecordCreateActivity.class);
+
+                // 標記為編輯模式
+                intent.putExtra("IS_EDIT_MODE", true);
+
+                // 塞入這筆病歷的詳細資料
+                intent.putExtra("RECORD_ID", record.getRecordID());
+                intent.putExtra("VISIT_DATE", record.getVisitDate());
+
+                // 注意：針對可能為 null 的字串做防呆處理
+                intent.putExtra("SYMPTOMS", record.getSymptoms() != null ? record.getSymptoms() : "");
+                intent.putExtra("DIAGNOSIS", record.getDiagnosis() != null ? record.getDiagnosis() : "");
+
+                // 啟動表單頁面
+                startActivity(intent);
+            }
         });
         fabAddMedicalRecord.setOnClickListener(new View.OnClickListener() {
             @Override

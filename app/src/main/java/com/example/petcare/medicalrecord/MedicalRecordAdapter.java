@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,8 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
     // 🌟 1. 定義一個 Interface
     public interface OnItemClickListener {
         void onAttachmentClick(String fileName);
+
+        void onEditClick(MedicalRecordDto record);
     }
 
     private OnItemClickListener listener;
@@ -77,6 +80,11 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
             // 沒檔案時，點擊卡片就沒反應
             holder.itemView.setOnClickListener(null);
         }
+        holder.ivEdit.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onEditClick(record);
+            }
+        });
     }
 
     @Override
@@ -86,7 +94,7 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvVisitDate, tvVetId, tvSymptoms, tvDiagnosis;
-        ImageView ivAttachment;
+        ImageView ivAttachment, ivEdit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +103,7 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
             tvSymptoms = itemView.findViewById(R.id.tvSymptoms);
             tvDiagnosis = itemView.findViewById(R.id.tvDiagnosis);
             ivAttachment = itemView.findViewById(R.id.ivAttachment);
+            ivEdit = itemView.findViewById(R.id.ivEdit);
         }
     }
 }

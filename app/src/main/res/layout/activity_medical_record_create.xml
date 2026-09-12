@@ -14,7 +14,8 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#265B6A"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp"
+        android:id="@+id/tvTitle"/>
 
     <EditText
         android:id="@+id/editVisitDate"

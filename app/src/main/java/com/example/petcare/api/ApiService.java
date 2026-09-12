@@ -91,4 +91,14 @@ public interface ApiService {
             @Part("Diagnosis") RequestBody diagnosis,
             @Part MultipartBody.Part uploadFile // 可為 null
     );
+
+    @Multipart
+    @PUT("api/Pets/medical-records/{recordId}")
+    Call<Object> updateMedicalRecord(
+            @Path("recordId") int recordId,
+            @Part("VisitDate") RequestBody visitDate,
+            @Part("Symptoms") RequestBody symptoms,
+            @Part("Diagnosis") RequestBody diagnosis,
+            @Part MultipartBody.Part uploadFile // 可為 null
+    );
 }
