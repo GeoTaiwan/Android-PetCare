@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FAF9F6"
+    android:id="@+id/main">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="新增醫療紀錄"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#265B6A"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/editVisitDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="就診日期 (點擊選擇)"
+        android:focusable="false"
+        android:clickable="true"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editSymptoms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="症狀描述"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editDiagnosis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="診斷結果"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnSelectFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="附加檢驗報告 (選填)"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSaveRecord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="儲存病歷"
+        android:backgroundTint="#265B6A"/>
+</LinearLayout>

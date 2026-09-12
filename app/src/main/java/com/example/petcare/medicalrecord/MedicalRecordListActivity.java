@@ -16,6 +16,8 @@ import com.example.petcare.api.RetrofitClient;
 import com.example.petcare.medicalrecord.MedicalRecordAdapter;
 import com.example.petcare.medicalrecord.MedicalRecordDto;
 import com.example.petcare.medicalrecord.MedicalRecordListResponse;
+import com.example.petcare.medicalrecord.create.MedicalRecordCreateActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import retrofit2.Call;
@@ -28,18 +30,20 @@ public class MedicalRecordListActivity extends AppCompatActivity {
     private MedicalRecordAdapter adapter;
     private LinearLayout layoutEmpty;
     private int currentPetId;
+    private FloatingActionButton fabAddMedicalRecord;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_record_list);
-
+        fabAddMedicalRecord = findViewById(R.id.fabAddMedicalRecord);
         // 1. 取得從前一頁傳來的 Pet ID
         currentPetId = getIntent().getIntExtra("PET_ID", -1);
-
+        // 判斷是否從主畫面來
         if (getIntent().getBooleanExtra("fromMain",false)){
             currentPetId = 0;
+            fabAddMedicalRecord.setVisibility(View.GONE);
         }else {
             if (currentPetId == -1) {
                 Toast.makeText(this, "無法取得寵物資料", Toast.LENGTH_SHORT).show();
@@ -54,6 +58,7 @@ public class MedicalRecordListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewMedical);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         adapter = new MedicalRecordAdapter();
         // 🌟 實作點擊事件
         adapter.setOnItemClickListener(new MedicalRecordAdapter.OnItemClickListener() {
@@ -67,9 +72,24 @@ public class MedicalRecordListActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             }
         });
+        fabAddMedicalRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MedicalRecordListActivity.this, MedicalRecordCreateActivity.class);
+                i.putExtra("PET_ID",currentPetId);
+                startActivity(i);
+            }
+        });
+
         recyclerView.setAdapter(adapter);
 
         // 3. 呼叫 API 載入資料
+        fetchMedicalRecords();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         fetchMedicalRecords();
     }
 
