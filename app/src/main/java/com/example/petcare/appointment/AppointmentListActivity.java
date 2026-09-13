@@ -50,6 +50,12 @@ public class AppointmentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // 3. 呼叫 API 取資料
+//        fetchMyAppointments();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         fetchMyAppointments();
     }
 
