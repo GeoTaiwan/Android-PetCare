@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9F6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新增預約服務"
+            android:textColor="#265B6A"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 1. 選擇寵物 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. 選擇要預約的毛孩"
+            android:textColor="#555555"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerPets"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_marginBottom="20dp" />
+
+        <!-- 2. 選擇機構 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. 選擇服務機構"
+            android:textColor="#555555"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerInstitutions"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_marginBottom="20dp" />
+
+        <!-- 3. 選擇日期 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3. 選擇預約日期"
+            android:textColor="#555555"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnSelectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="點此選擇日期"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginBottom="20dp" />
+
+        <!-- 4. 選擇時段 (預設隱藏，選完日期後顯示) -->
+        <LinearLayout
+            android:id="@+id/layoutTimeSlots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4. 選擇可預約時段"
+                android:textColor="#555555"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- 使用網格顯示時間 (例如 09:00, 09:30...) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerTimeSlots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSubmitReservation"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="送出預約申請"
+            android:textSize="18sp"
+            android:backgroundTint="#265B6A"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

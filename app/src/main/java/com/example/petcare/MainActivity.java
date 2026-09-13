@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.petcare.appointment.AppointmentListActivity;
 import com.example.petcare.auth.LoginActivity;
 import com.example.petcare.caregroominglog.CareGroomingLogListActivity;
 import com.example.petcare.medicalrecord.MedicalRecordListActivity;
@@ -19,7 +20,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
     ImageView btn_logout;
-    MaterialCardView cardMyPets,cardMedicalRecords,cardGrooming;
+    MaterialCardView cardMyPets,cardMedicalRecords,cardGrooming,cardAppointments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         cardMyPets = findViewById(R.id.cardMyPets);
         cardMedicalRecords = findViewById(R.id.cardMedicalRecords);
         cardGrooming = findViewById(R.id.cardGrooming);
+        cardAppointments = findViewById(R.id.cardAppointments);
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MedicalRecordListActivity.class);
+//                intent.putExtra("PET_ID", currentPetId);
+                intent.putExtra("fromMain",true);
+                startActivity(intent);
+            }
+        });
+        cardAppointments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AppointmentListActivity.class);
 //                intent.putExtra("PET_ID", currentPetId);
                 intent.putExtra("fromMain",true);
                 startActivity(intent);

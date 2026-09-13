@@ -1,5 +1,9 @@
 package com.example.petcare.api;
 
+import com.example.petcare.appointment.AppointmentCreateRequest;
+import com.example.petcare.appointment.AppointmentListResponse;
+import com.example.petcare.appointment.InstitutionListResponse;
+import com.example.petcare.appointment.TimeSlotResponse;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
@@ -21,6 +25,7 @@ import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // 對應你的 [HttpPost("login")]
@@ -105,4 +110,19 @@ public interface ApiService {
 
     @GET("api/Pets/grooming-cares/{id}")
     Call<CareGroomingLogListResponse> getGroomingCares(@Path("id") int petId);
+
+    // 1. 取得機構列表 (用於 Spinner)
+    @GET("api/Pets/for-reservation")
+    Call<InstitutionListResponse> getInstitutionsForReservation(@Query("typeId") String typeId);
+
+    // 2. 取得可用時段 (用於時間網格)
+    @GET("api/appointments/time-slots")
+    Call<TimeSlotResponse> getAvailableTimeSlots(@Query("date") String date);
+
+    // 3. 送出預約 (POST)
+    @POST("api/appointments")
+    Call<Object> createAppointment(@Body AppointmentCreateRequest request);
+
+    @GET("api/appointments/my")
+    Call<AppointmentListResponse> getMyAppointments();
 }

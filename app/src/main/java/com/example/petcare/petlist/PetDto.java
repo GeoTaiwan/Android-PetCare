@@ -38,6 +38,8 @@ public class PetDto {
     public String getProfilePhotoUrl(){
         return profilePhotoUrl;
     }
-
-    // ... 其餘 Getter 略 ...
+    @Override
+    public String toString(){
+        return name;
+    }
 }
