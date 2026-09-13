@@ -1,6 +1,7 @@
-package com.example.petcare.appointment;
+package com.example.petcare.appointment.create;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -186,6 +187,17 @@ public class ReservationActivity extends AppCompatActivity {
                     finish(); // 關閉預約頁面，回到主畫面
                 } else {
                     Toast.makeText(ReservationActivity.this, "預約失敗，該時段可能已被搶先", Toast.LENGTH_LONG).show();
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "未知錯誤";
+                        Toast.makeText(ReservationActivity.this, "後端拒絕：" + errorBody, Toast.LENGTH_LONG).show();
+                        Log.d("檢視送出項目", "onResponse: " +
+                                "\nPetID:" +selectedPet.getPetId()+
+                                "\nInstID:" + selectedInst.getInstitutionID()+
+                                "\nselectedDate:" + selectedDate+
+                                "\nselectedTime:" + selectedTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     btnSubmitReservation.setEnabled(true);
                 }
             }

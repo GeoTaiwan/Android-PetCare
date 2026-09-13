@@ -1,9 +1,9 @@
 package com.example.petcare.api;
 
-import com.example.petcare.appointment.AppointmentCreateRequest;
+import com.example.petcare.appointment.create.AppointmentCreateRequest;
 import com.example.petcare.appointment.AppointmentListResponse;
-import com.example.petcare.appointment.InstitutionListResponse;
-import com.example.petcare.appointment.TimeSlotResponse;
+import com.example.petcare.appointment.create.InstitutionListResponse;
+import com.example.petcare.appointment.create.TimeSlotResponse;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;

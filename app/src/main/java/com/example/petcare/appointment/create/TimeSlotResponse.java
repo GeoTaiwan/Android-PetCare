@@ -1,4 +1,4 @@
-package com.example.petcare.appointment;
+package com.example.petcare.appointment.create;
 
 import java.util.List;
 

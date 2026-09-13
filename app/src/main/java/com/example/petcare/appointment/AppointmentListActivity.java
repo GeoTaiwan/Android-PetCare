@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
+import com.example.petcare.appointment.create.ReservationActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class AppointmentListActivity extends AppCompatActivity {
         fabAddReservation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AppointmentListActivity.this,ReservationActivity.class);
+                Intent i = new Intent(AppointmentListActivity.this, ReservationActivity.class);
                 startActivity(i);
             }
         });

@@ -1,7 +1,9 @@
-package com.example.petcare.appointment;
+package com.example.petcare.appointment.create;
+
+import com.google.gson.annotations.SerializedName;
 
 public class InstitutionDto {
-
+    @SerializedName("institutionID")
     private String InstitutionID;
     private String name;
     private String TypeName;
