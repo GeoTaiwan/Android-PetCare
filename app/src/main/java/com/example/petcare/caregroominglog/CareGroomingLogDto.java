@@ -9,6 +9,10 @@ public class CareGroomingLogDto {
     private String dietNotes;
     private String petName; // 🌟 新增
 
+    private String staffName;
+
+    public String getStaffName() { return staffName; }
+
     public String getPetName() { return petName; }
 
     // 請補上 Getter 方法

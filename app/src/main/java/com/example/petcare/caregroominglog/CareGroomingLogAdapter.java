@@ -41,7 +41,7 @@ public class CareGroomingLogAdapter extends RecyclerView.Adapter<CareGroomingLog
 //        holder.tvLogDate.setText(formattedDate);
         holder.tvLogDate.setText(log.getPetName() + " - " + formattedDate);
         // 處理照護人員
-        holder.tvStaff.setText("照護員: " + (log.getStaffID() != null ? log.getStaffID() : "未知"));
+        holder.tvStaff.setText("照護員: " + (log.getStaffName() != null ? log.getStaffName() : "未知"));
 
         // 處理細節與備註的防呆
         holder.tvActivityDetails.setText(log.getActivityDetails() != null && !log.getActivityDetails().isEmpty()
