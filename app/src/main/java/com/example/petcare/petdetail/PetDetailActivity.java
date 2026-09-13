@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.R;
 import com.example.petcare.api.RetrofitClient;
+import com.example.petcare.caregroominglog.CareGroomingLogListActivity;
 import com.example.petcare.medicalrecord.MedicalRecordListActivity;
 import com.example.petcare.petcreate.PetCreateActivity;
 
@@ -30,7 +31,7 @@ public class PetDetailActivity extends AppCompatActivity {
     // 宣告畫面元件
     private TextView tvName, tvSpeciesBreed, tvDetails, tvWeightInfo;
     private ImageView ivProfilePhoto;
-    private Button btnAddWeight,btnEdit,btnDelete,btnMedicalRecord;
+    private Button btnAddWeight,btnEdit,btnDelete,btnMedicalRecord,btnCareLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +48,16 @@ public class PetDetailActivity extends AppCompatActivity {
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
         btnMedicalRecord=findViewById(R.id.btn_medicalRecord);
+        btnCareLog = findViewById(R.id.btn_careLog);
+
 
         btnMedicalRecord.setOnClickListener(v -> {
             Intent intent = new Intent(PetDetailActivity.this, MedicalRecordListActivity.class);
+            intent.putExtra("PET_ID", currentPetId);
+            startActivity(intent);
+        });
+        btnCareLog.setOnClickListener(v -> {
+            Intent intent = new Intent(PetDetailActivity.this, CareGroomingLogListActivity.class);
             intent.putExtra("PET_ID", currentPetId);
             startActivity(intent);
         });

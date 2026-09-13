@@ -3,6 +3,7 @@ package com.example.petcare.api;
 import com.example.petcare.PetWeightCreateDto;
 import com.example.petcare.auth.LoginRequest;
 import com.example.petcare.auth.LoginResponse;
+import com.example.petcare.caregroominglog.CareGroomingLogListResponse;
 import com.example.petcare.medicalrecord.MedicalRecordListResponse;
 import com.example.petcare.petcreate.PetCreateDto;
 import com.example.petcare.petcreate.PetOptionsResponse;
@@ -101,4 +102,7 @@ public interface ApiService {
             @Part("Diagnosis") RequestBody diagnosis,
             @Part MultipartBody.Part uploadFile // 可為 null
     );
+
+    @GET("api/Pets/grooming-cares/{id}")
+    Call<CareGroomingLogListResponse> getGroomingCares(@Path("id") int petId);
 }

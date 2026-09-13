@@ -178,11 +178,18 @@
                         android:text="查看病歷" />
 
                     <Button
+                        android:id="@+id/btn_careLog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="照護紀錄" />
+
+                    <Button
                         android:id="@+id/btn_addWeight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="+" />
+                        android:text="新增體重" />
                 </LinearLayout>
                 <!-- 如果你想加上之前 API 回傳的就診次數，可以在這裡新增 TextView -->
 

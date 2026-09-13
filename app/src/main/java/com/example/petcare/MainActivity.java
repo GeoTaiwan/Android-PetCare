@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.petcare.auth.LoginActivity;
+import com.example.petcare.caregroominglog.CareGroomingLogListActivity;
 import com.example.petcare.medicalrecord.MedicalRecordListActivity;
 import com.example.petcare.petdetail.PetDetailActivity;
 import com.example.petcare.petlist.PetListActivity;
@@ -18,7 +19,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
     ImageView btn_logout;
-    MaterialCardView cardMyPets,cardMedicalRecords;
+    MaterialCardView cardMyPets,cardMedicalRecords,cardGrooming;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btn_logout = findViewById(R.id.btnLogout);
         cardMyPets = findViewById(R.id.cardMyPets);
         cardMedicalRecords = findViewById(R.id.cardMedicalRecords);
+        cardGrooming = findViewById(R.id.cardGrooming);
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MedicalRecordListActivity.class);
 //                intent.putExtra("PET_ID", currentPetId);
                 intent.putExtra("fromMain",true);
+                startActivity(intent);
+            }
+        });
+
+        cardGrooming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CareGroomingLogListActivity.class);
+//                intent.putExtra("PET_ID", currentPetId);
+                intent.putExtra("FROM_MAIN",true);
                 startActivity(intent);
             }
         });
