@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -32,6 +33,8 @@ public class ReservationActivity extends AppCompatActivity {
 
     private TimeSlotAdapter timeSlotAdapter;
 
+    private EditText etRemarks;
+
     // 儲存使用者選擇的資料
     private String selectedDate = "";
     private String selectedTime = "";
@@ -48,6 +51,7 @@ public class ReservationActivity extends AppCompatActivity {
         btnSubmitReservation = findViewById(R.id.btnSubmitReservation);
         layoutTimeSlots = findViewById(R.id.layoutTimeSlots);
         recyclerTimeSlots = findViewById(R.id.recyclerTimeSlots);
+        etRemarks = findViewById(R.id.etRemarks);
 
         // 2. 設定時間網格 (一排顯示 3 個時段)
         recyclerTimeSlots.setLayoutManager(new GridLayoutManager(this, 3));
@@ -173,7 +177,7 @@ public class ReservationActivity extends AppCompatActivity {
         AppointmentCreateRequest request = new AppointmentCreateRequest(
                 selectedPet.getPetId(),
                 selectedInst.getInstitutionID(),
-                "一般預約", // 或是讓使用者自己填寫
+                etRemarks.getText().toString(),
                 selectedDate,
                 selectedTime
         );
@@ -190,11 +194,11 @@ public class ReservationActivity extends AppCompatActivity {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "未知錯誤";
                         Toast.makeText(ReservationActivity.this, "後端拒絕：" + errorBody, Toast.LENGTH_LONG).show();
-                        Log.d("檢視送出項目", "onResponse: " +
-                                "\nPetID:" +selectedPet.getPetId()+
-                                "\nInstID:" + selectedInst.getInstitutionID()+
-                                "\nselectedDate:" + selectedDate+
-                                "\nselectedTime:" + selectedTime);
+//                        Log.d("檢視送出項目", "onResponse: " +
+//                                "\nPetID:" +selectedPet.getPetId()+
+//                                "\nInstID:" + selectedInst.getInstitutionID()+
+//                                "\nselectedDate:" + selectedDate+
+//                                "\nselectedTime:" + selectedTime);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
