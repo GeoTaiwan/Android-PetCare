@@ -50,6 +50,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvVisitDate" />
 
+        <TextView
+            android:id="@+id/tvPetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="寵物呼名: "
+            android:textColor="#333"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvVisitDate"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
@@ -60,7 +73,7 @@
             android:background="#EEEEEE"
             app:layout_constraintStart_toEndOf="@id/colorStrip"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvVisitDate" />
+            app:layout_constraintTop_toBottomOf="@id/tvPetName" />
 
         <!-- 症狀標題與內容 -->
         <TextView

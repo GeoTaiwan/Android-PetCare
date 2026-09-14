@@ -16,6 +16,12 @@ import java.util.List;
 
 public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdapter.ViewHolder> {
 
+    private boolean fromMain = false;
+
+    public void setFromMain(boolean fromMain) {
+        this.fromMain = fromMain;
+    }
+
     private List<MedicalRecordDto> records = new ArrayList<>();
 
     // 🌟 1. 定義一個 Interface
@@ -55,9 +61,13 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
         if (formattedDate != null && formattedDate.length() >= 16) {
             formattedDate = formattedDate.substring(0, 16).replace("T", " ");
         }
+        if (!fromMain){
+            holder.tvPetName.setVisibility(View.GONE);
+        }
         holder.tvVisitDate.setText(formattedDate);
 
         holder.tvVetId.setText("獸醫: " + record.getVetName());
+        holder.tvPetName.setText(holder.tvPetName.getText().toString()+record.getPetName());
 
         // 處理可能為 null 的文字
         holder.tvSymptoms.setText(record.getSymptoms() != null ? record.getSymptoms() : "無紀錄");
@@ -93,7 +103,7 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvVisitDate, tvVetId, tvSymptoms, tvDiagnosis;
+        TextView tvVisitDate, tvVetId, tvSymptoms, tvDiagnosis , tvPetName;
         ImageView ivAttachment, ivEdit;
 
         public ViewHolder(@NonNull View itemView) {
@@ -102,6 +112,7 @@ public class MedicalRecordAdapter extends RecyclerView.Adapter<MedicalRecordAdap
             tvVetId = itemView.findViewById(R.id.tvVetId);
             tvSymptoms = itemView.findViewById(R.id.tvSymptoms);
             tvDiagnosis = itemView.findViewById(R.id.tvDiagnosis);
+            tvPetName = itemView.findViewById(R.id.tvPetName);
             ivAttachment = itemView.findViewById(R.id.ivAttachment);
             ivEdit = itemView.findViewById(R.id.ivEdit);
         }

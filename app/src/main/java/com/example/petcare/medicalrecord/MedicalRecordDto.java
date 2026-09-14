@@ -9,6 +9,8 @@ public class MedicalRecordDto {
     private String testResultsFile;
     private String vetName;
 
+    private String petName;
+
 
 
 
@@ -19,4 +21,5 @@ public class MedicalRecordDto {
     public String getDiagnosis() { return diagnosis; }
     public String getTestResultsFile() { return testResultsFile; }
     public String getVetName() { return vetName; }
+    public String getPetName() { return petName; }
 }

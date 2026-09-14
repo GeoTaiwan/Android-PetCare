@@ -32,6 +32,8 @@ public class MedicalRecordListActivity extends AppCompatActivity {
     private int currentPetId;
     private FloatingActionButton fabAddMedicalRecord;
 
+    private boolean fromMain = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,9 @@ public class MedicalRecordListActivity extends AppCompatActivity {
         fabAddMedicalRecord = findViewById(R.id.fabAddMedicalRecord);
         // 1. 取得從前一頁傳來的 Pet ID
         currentPetId = getIntent().getIntExtra("PET_ID", -1);
+        fromMain = getIntent().getBooleanExtra("fromMain",false);
         // 判斷是否從主畫面來
-        if (getIntent().getBooleanExtra("fromMain",false)){
+        if (fromMain){
             currentPetId = 0;
             fabAddMedicalRecord.setVisibility(View.GONE);
         }else {
@@ -60,6 +63,7 @@ public class MedicalRecordListActivity extends AppCompatActivity {
 
 
         adapter = new MedicalRecordAdapter();
+        adapter.setFromMain(fromMain);
         // 🌟 實作點擊事件
         adapter.setOnItemClickListener(new MedicalRecordAdapter.OnItemClickListener() {
             @Override
@@ -103,7 +107,7 @@ public class MedicalRecordListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // 3. 呼叫 API 載入資料
-        fetchMedicalRecords();
+//        fetchMedicalRecords();
     }
 
     @Override
